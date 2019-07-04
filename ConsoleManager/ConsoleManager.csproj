@@ -43,7 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FocusManager.cs" />
     <Compile Include="ListView.cs" />
+    <Compile Include="ListViewGenerator.cs" />
     <Compile Include="ListViewItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
