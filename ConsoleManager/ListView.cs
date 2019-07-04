@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,26 +13,41 @@ namespace ConsoleManager
         private int _prevSelecteIndex;
         private int _selectedIndex;
         private bool _wasPainted;
-        private List<FileSystemInfo> _items { get; set; }
-        private FileSystemInfo _selectedItem { get; set; }
-        private bool _focused { get; set; }
+        public List<ListViewItem> _items { get; set; }
 
-        public ListView(List<FileSystemInfo> items)
+        public List<int> ColumnsWidth { get; set; }
+        public ListViewItem _selectedItem => _items[_selectedIndex];
+        private bool _focused { get; set; }
+        private int _x, _y;
+        public void Clean()
         {
+            _selectedIndex = _prevSelecteIndex = 0;
+            _wasPainted = false;
+            for (int i = 0; i < _items.Count; i++)
+            {
+                Console.CursorLeft = _x;
+                Console.CursorTop = i + _y;
+                _items[i].Clean(ColumnsWidth, i,_x,_y);
+            }
+        }
+
+        public ListView(int x , int y, List<ListViewItem> items)
+        {
+            _x = x;
+            _y = y;
             _items = items;
         }
 
         public void Render()
         {
             for (int i = 0; i < _items.Count; i++)
-            {
-                
+            {               
                 if (_wasPainted && i != _selectedIndex && i != _prevSelecteIndex)
                 {
                     continue;
                 }
 
-                _selectedItem = _items[i];
+                var item = _items[i];
                 var savedForeground = Console.ForegroundColor;
                 var savedBackGround = Console.BackgroundColor;
                 if (i == _selectedIndex)
@@ -39,9 +55,10 @@ namespace ConsoleManager
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.BackgroundColor = ConsoleColor.White;
                 }
-                Console.CursorLeft = 0;
-                Console.CursorTop = i;
-                Console.Write(_selectedItem.Name);
+                Console.CursorLeft = _x;
+                Console.CursorTop = i +_y;
+                Console.Write(item);
+                item.Render(ColumnsWidth, i,_x,_y);
 
                 Console.ForegroundColor = savedForeground;
                 Console.BackgroundColor = savedBackGround;
@@ -58,7 +75,49 @@ namespace ConsoleManager
             else if (key.Key == ConsoleKey.DownArrow && _selectedIndex < _items.Count - 1)
             {
                 _selectedIndex++;
+            }else if (key.Key == ConsoleKey.Enter)
+            {
+                Selected(this, EventArgs.Empty);
             }
+
         }
+
+        //public static List<ListView> GenerateListViews(List<string>pathes)
+        //{
+        //    List<ListView> listViews = new List<ListView>() { };
+        //    foreach(string path in pathes)
+        //    {
+        //        var listView = new ListView(10, 2, GetItems("C:\\"));
+        //        listView.ColumnsWidth = new List<int> { 30, 10, 10 };
+        //        listView.Selected += View_Selected;
+        //        listViews.Add(listView);
+        //    }
+        //    return listViews;
+        //}
+        public event EventHandler Selected;
+
+        //private static List<ListViewItem> GetItems(string path)
+        //{
+        //    return new DirectoryInfo(path).GetFileSystemInfos()
+        //        .Select(f =>
+        //        new ListViewItem(
+        //            f,
+        //            f.Name,
+        //            f is DirectoryInfo dir ? "<dir>" : f.Extension,
+        //            f is FileInfo file ? file.Length.ToString() : "")).ToList();
+        //}
+
+        //private static void View_Selected(object sender, EventArgs e)
+        //{
+        //    var view = (ListView)sender;
+        //    var info = view._selectedItem.State;
+        //    if (info is FileInfo file)
+        //        Process.Start(file.FullName);
+        //    else if (info is DirectoryInfo dir)
+        //    {
+        //        view.Clean();
+        //        view._items = GetItems(dir.FullName);
+        //    }
+        //}
     }
 }
