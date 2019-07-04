@@ -82,42 +82,45 @@ namespace ConsoleManager
 
         }
 
-        //public static List<ListView> GenerateListViews(List<string>pathes)
-        //{
-        //    List<ListView> listViews = new List<ListView>() { };
-        //    foreach(string path in pathes)
-        //    {
-        //        var listView = new ListView(10, 2, GetItems("C:\\"));
-        //        listView.ColumnsWidth = new List<int> { 30, 10, 10 };
-        //        listView.Selected += View_Selected;
-        //        listViews.Add(listView);
-        //    }
-        //    return listViews;
-        //}
+        public static List<ListView> GenerateListViews(List<string> pathes)
+        {
+            List<ListView> listViews = new List<ListView>() { };
+            int i = 1;
+            foreach (string path in pathes)
+            {
+
+                var listView = new ListView(10 + i, 2, GetItems(path));
+                i = i + 50;
+                listView.ColumnsWidth = new List<int> { 30, 10, 10 };
+                listView.Selected += View_Selected;
+                listViews.Add(listView);
+            }
+            return listViews;
+        }
         public event EventHandler Selected;
 
-        //private static List<ListViewItem> GetItems(string path)
-        //{
-        //    return new DirectoryInfo(path).GetFileSystemInfos()
-        //        .Select(f =>
-        //        new ListViewItem(
-        //            f,
-        //            f.Name,
-        //            f is DirectoryInfo dir ? "<dir>" : f.Extension,
-        //            f is FileInfo file ? file.Length.ToString() : "")).ToList();
-        //}
+        private static List<ListViewItem> GetItems(string path)
+        {
+            return new DirectoryInfo(path).GetFileSystemInfos()
+                .Select(f =>
+                new ListViewItem(
+                    f,
+                    f.Name,
+                    f is DirectoryInfo dir ? "<dir>" : f.Extension,
+                    f is FileInfo file ? file.Length.ToString() : "")).ToList();
+        }
 
-        //private static void View_Selected(object sender, EventArgs e)
-        //{
-        //    var view = (ListView)sender;
-        //    var info = view._selectedItem.State;
-        //    if (info is FileInfo file)
-        //        Process.Start(file.FullName);
-        //    else if (info is DirectoryInfo dir)
-        //    {
-        //        view.Clean();
-        //        view._items = GetItems(dir.FullName);
-        //    }
-        //}
+        private static void View_Selected(object sender, EventArgs e)
+        {
+            var view = (ListView)sender;
+            var info = view._selectedItem.State;
+            if (info is FileInfo file)
+                Process.Start(file.FullName);
+            else if (info is DirectoryInfo dir)
+            {
+                view.Clean();
+                view._items = GetItems(dir.FullName);
+            }
+        }
     }
 }
