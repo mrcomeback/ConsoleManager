@@ -18,7 +18,6 @@ namespace ConsoleManager
             {
                 listViews[focusedIndex].Focused = false;
                 listViews[focusedIndex - 1].Focused = true;
-                //Console.ForegroundColor = ConsoleColor.Green;
             }
             else if (key.Key == ConsoleKey.RightArrow && focusedIndex < listViews.Count - 1)
             {

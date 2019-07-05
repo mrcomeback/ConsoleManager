@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.IO;
 
 namespace ConsoleManager
 {
@@ -74,6 +74,18 @@ namespace ConsoleManager
             }else if (key.Key == ConsoleKey.Enter)
             {
                 Selected(this, EventArgs.Empty);
+            }else if (key.Key == ConsoleKey.F2)
+            {
+                Console.WriteLine(_selectedItem);
+            }else if (key.Key == ConsoleKey.F5)
+            {
+                Console.WriteLine(_selectedItem);
+                var pathWithoutName = _selectedItem.State.FullName.Substring(0, _selectedItem.State.FullName.Length - _selectedItem.State.Name.Length);
+                File.Move(_selectedItem.State.FullName, pathWithoutName + "New Name222.js");
+
+
+                Render();
+                Console.WriteLine();
             }
         }
         public event EventHandler Selected;
@@ -82,21 +94,40 @@ namespace ConsoleManager
         {
             return _items;
         }
+
         public void SetlistViewItems(List<ListViewItem> newItems)
         {
             _items = newItems;
         }
+
         public void SetColumnsWidth(List<int> columnsWidth)
         {
             _columnsWidth = columnsWidth;
         }
+
         public List<int> GetColumnsWidth()
         {
             return _columnsWidth;
         }
+
         public ListViewItem GetSelectedItem()
         {
             return _selectedItem;
+        }
+
+        public void CopyDir()
+        {
+
+        }
+
+        public void CopyFile()
+        {
+
+        }
+
+        public void Rename()
+        {
+
         }
     }
 }

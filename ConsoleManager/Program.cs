@@ -13,8 +13,9 @@ namespace ConsoleManager
             Console.CursorVisible = false;
             ListViewGenerator listViewGenerator = new ListViewGenerator();
             FocusManager focusManager = new FocusManager();
-            List<ListView> listviews = listViewGenerator.GenerateListViews(new string[] { "C:\\", "C:\\"});
-            Console.WriteLine("[F2] - Copy;[F3] - Paste;[F5] - View All discs");
+            //FCommandsManager fCommandsManager = new FCommandsManager();
+            List<ListView> listviews = listViewGenerator.GenerateListViews(new string[] { "E:\\", "E:\\"});
+            Console.WriteLine("[F2] - Copy;[F3] - Paste;[F4] - View All discs,[F5]- Rename");
 
             foreach (ListView listView in listviews)
             {
@@ -31,13 +32,12 @@ namespace ConsoleManager
                     if (key.Key == ConsoleKey.LeftArrow || key.Key == ConsoleKey.RightArrow) {
                         listviews = focusManager.ChangeFocus(listviews, key);
                         listViewtoUpdate.Update(key);
-                        listViewtoUpdate.Render();
                     }
                     else
                     {
                         listViewtoUpdate.Update(key);
-                        listViewtoUpdate.Render();
                     }
+                    listViewtoUpdate.Render();
                 }
             }
         }

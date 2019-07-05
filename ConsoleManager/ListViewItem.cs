@@ -10,7 +10,7 @@ namespace ConsoleManager
     class ListViewItem
     {
         private readonly string[] _columns;
-        public object State { get; }
+        public FileSystemInfo State { get; }
 
         public ListViewItem(FileSystemInfo state, params string[] columns)
         {
