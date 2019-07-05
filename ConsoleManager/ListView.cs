@@ -9,12 +9,11 @@ namespace ConsoleManager
         private int _prevSelecteIndex;
         private int _selectedIndex;
         private bool _wasPainted;
-        public List<ListViewItem> _items { get; set; }
-
-        public List<int> ColumnsWidth { get; set; }
-        public ListViewItem _selectedItem => _items[_selectedIndex];
-        public bool _focused { get; set; }
+        private List<ListViewItem> _items;
+        private List<int> _columnsWidth;
+        private ListViewItem _selectedItem => _items[_selectedIndex];
         private int _x, _y;
+        public bool Focused { get; set; }
 
         public void Clean()
         {
@@ -24,7 +23,7 @@ namespace ConsoleManager
             {
                 Console.CursorLeft = _x;
                 Console.CursorTop = i + _y;
-                _items[i].Clean(ColumnsWidth, i,_x,_y);
+                _items[i].Clean(_columnsWidth, i,_x,_y);
             }
         }
 
@@ -55,7 +54,7 @@ namespace ConsoleManager
                 Console.CursorLeft = _x;
                 Console.CursorTop = i +_y;
                 Console.Write(item);
-                item.Render(ColumnsWidth, i,_x,_y);
+                item.Render(_columnsWidth, i,_x,_y);
 
                 Console.ForegroundColor = savedForeground;
                 Console.BackgroundColor = savedBackGround;
@@ -79,5 +78,25 @@ namespace ConsoleManager
         }
         public event EventHandler Selected;
 
+        public List<ListViewItem> GetListViewItems()
+        {
+            return _items;
+        }
+        public void SetlistViewItems(List<ListViewItem> newItems)
+        {
+            _items = newItems;
+        }
+        public void SetColumnsWidth(List<int> columnsWidth)
+        {
+            _columnsWidth = columnsWidth;
+        }
+        public List<int> GetColumnsWidth()
+        {
+            return _columnsWidth;
+        }
+        public ListViewItem GetSelectedItem()
+        {
+            return _selectedItem;
+        }
     }
 }

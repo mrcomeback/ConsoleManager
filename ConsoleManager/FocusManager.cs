@@ -12,18 +12,19 @@ namespace ConsoleManager
 
         public List<ListView> ChangeFocus(List<ListView> listViews, ConsoleKeyInfo key)
         {
-            int focusedIndex = listViews.FindIndex(i => i._focused == true);
+            int focusedIndex = listViews.FindIndex(i => i.Focused == true);
             
             if (key.Key == ConsoleKey.LeftArrow && focusedIndex > 0)
             {
-                listViews[focusedIndex]._focused = false;
-                listViews[focusedIndex - 1]._focused = true;
-            }else if (key.Key == ConsoleKey.RightArrow && focusedIndex < listViews.Count - 1)
-            {
-                listViews[focusedIndex]._focused = false;
-                listViews[focusedIndex + 1]._focused = true;
+                listViews[focusedIndex].Focused = false;
+                listViews[focusedIndex - 1].Focused = true;
+                //Console.ForegroundColor = ConsoleColor.Green;
             }
-
+            else if (key.Key == ConsoleKey.RightArrow && focusedIndex < listViews.Count - 1)
+            {
+                listViews[focusedIndex].Focused = false;
+                listViews[focusedIndex + 1].Focused = true;
+            }
             return listViews;
         }
     }

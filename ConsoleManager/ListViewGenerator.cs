@@ -10,9 +10,9 @@ namespace ConsoleManager
 {
     class ListViewGenerator
     {
-        public const int widthColumn1 = 30;
-        public const int widthColumn2 = 10;
-        public const int widthColumn3 = 10;
+        private const int _widthColumn1 = 35;
+        private const int _widthColumn2 = 10;
+        private const int _widthColumn3 = 10;
 
         public List<ListView> GenerateListViews(string[] pathes)
         {
@@ -20,11 +20,11 @@ namespace ConsoleManager
 
             for (int i = 0; i < pathes.Length; i++)
             {
-                var listView = new ListView(i > 0 ? 10 + widthColumn1 + widthColumn2 + widthColumn3 : 10, 2, GetItems(pathes[i]));
-                listView.ColumnsWidth = new List<int> { widthColumn1, widthColumn2, widthColumn3 };
+                var listView = new ListView(i > 0 ? 6 + _widthColumn1 + _widthColumn2 + _widthColumn3 : 3, 2, GetItems(pathes[i]));
+                listView.SetColumnsWidth(new List<int> { _widthColumn1, _widthColumn2, _widthColumn3 });
                 listView.Selected += View_Selected;
                 if (i == 0)
-                    listView._focused = true;
+                    listView.Focused = true;
                 listViews.Add(listView);
             }
             return listViews;
@@ -44,13 +44,13 @@ namespace ConsoleManager
         private void View_Selected(object sender, EventArgs e)
         {
             var view = (ListView)sender;
-            var info = view._selectedItem.State;
+            var info = view.GetSelectedItem().State;
             if (info is FileInfo file)
                 Process.Start(file.FullName);
             else if (info is DirectoryInfo dir)
             {
                 view.Clean();
-                view._items = GetItems(dir.FullName);
+                view.SetlistViewItems(GetItems(dir.FullName));
             }
         }
     }

@@ -8,12 +8,13 @@ namespace ConsoleManager
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Console.CursorVisible = false;
             ListViewGenerator listViewGenerator = new ListViewGenerator();
             FocusManager focusManager = new FocusManager();
-            List<ListView> listviews = listViewGenerator.GenerateListViews(new string[] { "C:\\", "E:\\"});
+            List<ListView> listviews = listViewGenerator.GenerateListViews(new string[] { "C:\\", "C:\\"});
+            Console.WriteLine("[F2] - Copy;[F3] - Paste;[F5] - View All discs");
 
             foreach (ListView listView in listviews)
             {
@@ -22,9 +23,9 @@ namespace ConsoleManager
 
             while (true)
             {
-                var listViewtoUpdate = listviews.Find(i => i._focused == true);
+                var listViewtoUpdate = listviews.Find(i => i.Focused == true);
 
-                while (listViewtoUpdate._focused == true)
+                while (listViewtoUpdate.Focused == true)
                 {
                     var key = Console.ReadKey();
                     if (key.Key == ConsoleKey.LeftArrow || key.Key == ConsoleKey.RightArrow) {
