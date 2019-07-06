@@ -23,6 +23,7 @@ namespace ConsoleManager
                 var listView = new ListView(i > 0 ? 6 + _widthColumn1 + _widthColumn2 + _widthColumn3 : 3, 2, GetItems(pathes[i]));
                 listView.SetColumnsWidth(new List<int> { _widthColumn1, _widthColumn2, _widthColumn3 });
                 listView.Selected += View_Selected;
+                listView.Renamed += View_Renamed;
                 if (i == 0)
                     listView.Focused = true;
                 listViews.Add(listView);
@@ -30,7 +31,7 @@ namespace ConsoleManager
             return listViews;
         }
         
-        private List<ListViewItem> GetItems(string path)
+        public  List<ListViewItem> GetItems(string path)
         {
             return new DirectoryInfo(path).GetFileSystemInfos()
                 .Select(f =>
@@ -52,6 +53,27 @@ namespace ConsoleManager
                 view.Clean();
                 view.SetlistViewItems(GetItems(dir.FullName));
             }
+        }
+        private void View_Renamed(object sender, EventArgs e)
+        {
+            ModalWindow modal = new ModalWindow();
+            ListView listView = (ListView)sender;
+            string userInpur = modal.ShowModalWindow("Enter new file Name");
+            var selectedItem = listView.GetSelectedItem();
+            string newPath = Path.GetDirectoryName(listView.GetSelectedItem().State.FullName) + "\\" + userInpur;
+            
+            //int index = listView.GetListViewItems.IndexOf(_selectedItem);
+            if (selectedItem.State is FileInfo)
+            {
+                File.Move(selectedItem.State.FullName, newPath);
+            }
+            else
+            {
+                Directory.Move(selectedItem.State.FullName, newPath);
+            }
+            Console.WriteLine();
+            listView.Clean();
+            listView.SetlistViewItems(GetItems(selectedItem.State.FullName));
         }
     }
 }

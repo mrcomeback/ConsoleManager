@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace ConsoleManager
 {
@@ -48,13 +49,21 @@ namespace ConsoleManager
                 var savedBackGround = Console.BackgroundColor;
                 if (i == _selectedIndex)
                 {
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.BackgroundColor = ConsoleColor.White;
+                    if (Focused == true)
+                    {
+                        Console.BackgroundColor = ConsoleColor.Green;
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.BackgroundColor = ConsoleColor.White;
+                    }
                 }
                 Console.CursorLeft = _x;
                 Console.CursorTop = i +_y;
                 Console.Write(item);
-                item.Render(_columnsWidth, i,_x,_y);
+                item.Render(_columnsWidth, i, _x, _y);
 
                 Console.ForegroundColor = savedForeground;
                 Console.BackgroundColor = savedBackGround;
@@ -62,7 +71,7 @@ namespace ConsoleManager
             _wasPainted = true;
         }
 
-        public void Update(ConsoleKeyInfo key)
+        public void Update(ConsoleKeyInfo key,ListViewGenerator gen)
         {
             _prevSelecteIndex = _selectedIndex;
             if (key.Key == ConsoleKey.UpArrow && _selectedIndex != 0) {
@@ -77,18 +86,17 @@ namespace ConsoleManager
             }else if (key.Key == ConsoleKey.F2)
             {
                 Console.WriteLine(_selectedItem);
-            }else if (key.Key == ConsoleKey.F5)
+            }
+            else if (key.Key == ConsoleKey.F5)
             {
-                Console.WriteLine(_selectedItem);
-                var pathWithoutName = _selectedItem.State.FullName.Substring(0, _selectedItem.State.FullName.Length - _selectedItem.State.Name.Length);
-                File.Move(_selectedItem.State.FullName, pathWithoutName + "New Name222.js");
-
-
-                Render();
-                Console.WriteLine();
+                Renamed(this, EventArgs.Empty);
+                
+                //_items[index] = 
+                ///put into _items new item;
             }
         }
         public event EventHandler Selected;
+        public event EventHandler Renamed;
 
         public List<ListViewItem> GetListViewItems()
         {

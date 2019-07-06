@@ -47,6 +47,7 @@
     <Compile Include="ListView.cs" />
     <Compile Include="ListViewGenerator.cs" />
     <Compile Include="ListViewItem.cs" />
+    <Compile Include="ModalWindow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
