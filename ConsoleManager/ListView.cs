@@ -14,8 +14,6 @@ namespace ConsoleManager
         private List<int> _columnsWidth;
         private ListViewItem _selectedItem => _items[_selectedIndex];
         private int _x, _y;
-        private static ListViewItem _currentItemToOperateOn;
-        private static bool _copyOrPaste;
 
         public bool Focused { get; set; }
 
@@ -89,17 +87,17 @@ namespace ConsoleManager
             }
             else if (key.Key == ConsoleKey.F1)
             {
-                _currentItemToOperateOn = _selectedItem;
-                _copyOrPaste = true;
+                ItemToOperateOn.CurrentItemToOperateOn = _selectedItem;
+                ItemToOperateOn.CopyOrPaste = true;
             }
             else if (key.Key == ConsoleKey.F2)
             {
-                _currentItemToOperateOn = _selectedItem;
-                _copyOrPaste = false;
+                ItemToOperateOn.CurrentItemToOperateOn = _selectedItem;
+                ItemToOperateOn.CopyOrPaste = false;
             }
             else if (key.Key == ConsoleKey.F3)
             {
-                Paste(this, new CopyOrCutEventArgs(_currentItemToOperateOn, _copyOrPaste));
+                Paste(this, new CopyOrCutEventArgs(ItemToOperateOn.CurrentItemToOperateOn, ItemToOperateOn.CopyOrPaste));
             }
             else if (key.Key == ConsoleKey.F5)
             {

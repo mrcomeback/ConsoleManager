@@ -46,6 +46,7 @@
     <Compile Include="CopyOrCutEventArgs.cs" />
     <Compile Include="DirectoryOperations.cs" />
     <Compile Include="FocusManager.cs" />
+    <Compile Include="ItemToOperateOn.cs" />
     <Compile Include="ListView.cs" />
     <Compile Include="ListViewGenerator.cs" />
     <Compile Include="ListViewItem.cs" />

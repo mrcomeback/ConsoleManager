@@ -15,10 +15,8 @@ namespace ConsoleManager
         private const int _widthColumn3 = 10;
         private List<ListView> _listViews = new List<ListView>() { };
 
-    public List<ListView> GenerateListViews(string[] pathes)
+        public List<ListView> GenerateListViews(string[] pathes)
         {
-            //List<ListView> listViews = new List<ListView>() { };
-
             for (int i = 0; i < pathes.Length; i++)
             {
                 var listView = new ListView(i > 0 ? 6 + _widthColumn1 + _widthColumn2 + _widthColumn3 : 3, 2, GetItems(pathes[i]));
@@ -44,7 +42,7 @@ namespace ConsoleManager
                     f is FileInfo file ? file.Length.ToString() : "")).ToList();
         }
 
-        private void View_Selected(object sender, EventArgs e)
+        private void View_Selected(object sender, EventArgs eventArgs)
         {
             var view = (ListView)sender;
             var info = view.GetSelectedItem().State;
@@ -57,7 +55,7 @@ namespace ConsoleManager
             }
         }
 
-        private void View_Renamed(object sender, EventArgs e)
+        private void View_Renamed(object sender, EventArgs eventArgs)
         {
             ModalWindow modal = new ModalWindow();
             ListView listView = (ListView)sender;
