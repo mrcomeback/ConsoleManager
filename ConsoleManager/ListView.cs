@@ -77,13 +77,13 @@ namespace ConsoleManager
             _prevSelecteIndex = _selectedIndex;
             if (key.Key == ConsoleKey.UpArrow && _selectedIndex != 0) {
                 _selectedIndex--;
-            }   
+            }
             else if (key.Key == ConsoleKey.DownArrow && _selectedIndex < _items.Count - 1)
             {
                 _selectedIndex++;
             }else if (key.Key == ConsoleKey.Enter)
             {
-                Selected(this, EventArgs.Empty);
+                Select?.Invoke(this, EventArgs.Empty);
             }
             else if (key.Key == ConsoleKey.F1)
             {
@@ -97,15 +97,15 @@ namespace ConsoleManager
             }
             else if (key.Key == ConsoleKey.F3)
             {
-                Paste(this, new CopyOrCutEventArgs(ItemToOperateOn.CurrentItemToOperateOn, ItemToOperateOn.CopyOrPaste));
+                Paste?.Invoke(this, new CopyOrCutEventArgs(ItemToOperateOn.CurrentItemToOperateOn, ItemToOperateOn.CopyOrPaste));
             }
             else if (key.Key == ConsoleKey.F5)
             {
-                Renamed(this, EventArgs.Empty);              
+                Rename?.Invoke(this, EventArgs.Empty);              
             }
         }
-        public event EventHandler Selected;
-        public event EventHandler Renamed;
+        public event EventHandler Select;
+        public event EventHandler Rename;
         public event EventHandler<CopyOrCutEventArgs> Paste;
 
         public List<ListViewItem> GetListViewItems()
@@ -132,6 +132,5 @@ namespace ConsoleManager
         {
             return _selectedItem;
         }
-
     }
 }

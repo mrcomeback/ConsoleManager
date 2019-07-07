@@ -21,8 +21,8 @@ namespace ConsoleManager
             {
                 var listView = new ListView(i > 0 ? 6 + _widthColumn1 + _widthColumn2 + _widthColumn3 : 3, 2, GetItems(pathes[i]));
                 listView.SetColumnsWidth(new List<int> { _widthColumn1, _widthColumn2, _widthColumn3 });
-                listView.Selected += View_Selected;
-                listView.Renamed += View_Renamed;
+                listView.Select += View_Selected;
+                listView.Rename += View_Renamed;
                 listView.Paste += View_Paste;
                 if (i == 0)
                     listView.Focused = true;

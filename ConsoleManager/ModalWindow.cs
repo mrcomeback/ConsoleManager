@@ -25,7 +25,6 @@ namespace ConsoleManager
                 Console.CursorLeft = _cursorLeft;
                 Console.WriteLine(" ".PadLeft(40));
             }
-
             Console.CursorLeft = _cursorLeft;
             Console.CursorTop = _cursorTop;
             Console.Write(msg);
