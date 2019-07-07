@@ -14,6 +14,9 @@ namespace ConsoleManager
         private List<int> _columnsWidth;
         private ListViewItem _selectedItem => _items[_selectedIndex];
         private int _x, _y;
+        private static ListViewItem _currentItemToOperateOn;
+        private static bool _copyOrPaste;
+
         public bool Focused { get; set; }
 
         public void Clean()
@@ -71,7 +74,7 @@ namespace ConsoleManager
             _wasPainted = true;
         }
 
-        public void Update(ConsoleKeyInfo key,ListViewGenerator gen)
+        public void Update(ConsoleKeyInfo key)
         {
             _prevSelecteIndex = _selectedIndex;
             if (key.Key == ConsoleKey.UpArrow && _selectedIndex != 0) {
@@ -83,20 +86,29 @@ namespace ConsoleManager
             }else if (key.Key == ConsoleKey.Enter)
             {
                 Selected(this, EventArgs.Empty);
-            }else if (key.Key == ConsoleKey.F2)
+            }
+            else if (key.Key == ConsoleKey.F1)
             {
-                Console.WriteLine(_selectedItem);
+                _currentItemToOperateOn = _selectedItem;
+                _copyOrPaste = true;
+            }
+            else if (key.Key == ConsoleKey.F2)
+            {
+                _currentItemToOperateOn = _selectedItem;
+                _copyOrPaste = false;
+            }
+            else if (key.Key == ConsoleKey.F3)
+            {
+                Paste(this, new CopyOrCutEventArgs(_currentItemToOperateOn, _copyOrPaste));
             }
             else if (key.Key == ConsoleKey.F5)
             {
-                Renamed(this, EventArgs.Empty);
-                
-                //_items[index] = 
-                ///put into _items new item;
+                Renamed(this, EventArgs.Empty);              
             }
         }
         public event EventHandler Selected;
         public event EventHandler Renamed;
+        public event EventHandler<CopyOrCutEventArgs> Paste;
 
         public List<ListViewItem> GetListViewItems()
         {
@@ -123,19 +135,5 @@ namespace ConsoleManager
             return _selectedItem;
         }
 
-        public void CopyDir()
-        {
-
-        }
-
-        public void CopyFile()
-        {
-
-        }
-
-        public void Rename()
-        {
-
-        }
     }
 }

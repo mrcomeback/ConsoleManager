@@ -23,7 +23,7 @@ namespace ConsoleManager
             for (int i = 0; i < _columns.Length; i++)
             {
                 Console.CursorTop = elementIndex + listViewY;
-                Console.CursorLeft =listViewX + columnsWidth.Take(i).Sum();
+                Console.CursorLeft = listViewX + columnsWidth.Take(i).Sum();
                 Console.Write(GetStringWithLength(_columns[i] ,columnsWidth[i]));
             }
         }
