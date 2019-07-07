@@ -62,7 +62,6 @@ namespace ConsoleManager
             var selectedItem = listView.GetSelectedItem();
             string newPath = Path.GetDirectoryName(listView.GetSelectedItem().State.FullName) + "\\" + userInpur;
             
-            //int index = listView.GetListViewItems.IndexOf(_selectedItem);
             if (selectedItem.State is FileInfo)
             {
                 File.Move(selectedItem.State.FullName, newPath);
@@ -71,9 +70,8 @@ namespace ConsoleManager
             {
                 Directory.Move(selectedItem.State.FullName, newPath);
             }
-            Console.WriteLine();
-            listView.Clean();
-            listView.SetlistViewItems(GetItems(selectedItem.State.FullName));
+            modal.SetAppColors();
+            listView.SetlistViewItems(GetItems(Path.GetDirectoryName(listView.GetSelectedItem().State.FullName)));
         }
     }
 }
