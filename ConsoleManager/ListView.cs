@@ -108,10 +108,15 @@ namespace ConsoleManager
             {
                 Rename?.Invoke(this, EventArgs.Empty);              
             }
+            else if (key.Key == ConsoleKey.F6)
+            {
+                ViewDrives?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         public event EventHandler Select;
         public event EventHandler Rename;
+        public event EventHandler ViewDrives;
         public event EventHandler<ViewInfoEventArgs> ViewInfo;
         public event EventHandler<CopyOrCutEventArgs> Paste;
 
