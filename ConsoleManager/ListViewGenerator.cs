@@ -14,6 +14,7 @@ namespace ConsoleManager
         private const int _widthColumn2 = 10;
         private const int _widthColumn3 = 10;
         private List<ListView> _listViews = new List<ListView>() { };
+        private ModalWindow _modal = new ModalWindow();
 
         public List<ListView> GenerateListViews(string[] pathes)
         {
@@ -24,6 +25,7 @@ namespace ConsoleManager
                 listView.Select += View_Selected;
                 listView.Rename += View_Renamed;
                 listView.Paste += View_Paste;
+                listView.ViewInfo += View_Info;
                 if (i == 0)
                     listView.Focused = true;
                 _listViews.Add(listView);
@@ -39,7 +41,7 @@ namespace ConsoleManager
                     f,
                     f.Name,
                     f is DirectoryInfo dir ? "<dir>" : f.Extension,
-                    f is FileInfo file ? file.Length.ToString() : "")).ToList();
+                    f is FileInfo file ? file.Length.ToString() : String.Empty)).ToList();
         }
 
         private void View_Selected(object sender, EventArgs eventArgs)
@@ -57,9 +59,8 @@ namespace ConsoleManager
 
         private void View_Renamed(object sender, EventArgs eventArgs)
         {
-            ModalWindow modal = new ModalWindow();
             ListView listView = (ListView)sender;
-            string userInpur = modal.ShowModalWindow("Enter new file Name");
+            string userInpur = _modal.ShowModalWindow("Enter new file Name");
             var selectedItem = listView.GetSelectedItem();
             string newPath = Path.GetDirectoryName(listView.GetSelectedItem().State.FullName) + "\\" + userInpur;
             
@@ -71,9 +72,8 @@ namespace ConsoleManager
             {
                 Directory.Move(selectedItem.State.FullName, newPath);
             }
-            modal.SetAppColors();
-            listView.Clean();
-            listView.SetlistViewItems(GetItems(Path.GetDirectoryName(listView.GetSelectedItem().State.FullName)));
+            _modal.SetAppColors();
+            UpdateView(Path.GetDirectoryName(listView.GetSelectedItem().State.FullName));
         }
 
         private void View_Paste(object sender, CopyOrCutEventArgs eventArgs)
@@ -126,5 +126,49 @@ namespace ConsoleManager
                 lv.Render();
             }
         }
+
+        private void View_Info(object sender, ViewInfoEventArgs eventArgs)
+        {
+            var info = eventArgs.ListViewItem.State;
+            string infoStrings = String.Empty;
+            int readOnly = ((int)(info.Attributes) & (int)FileAttributes.ReadOnly);
+            if (info is FileInfo file)
+            {
+                infoStrings = $"Name: {info.Name}\r\n" +
+                    $"Parent Directory: {Path.GetDirectoryName(info.FullName)}\r\n" +
+                    $"Root Directory: {Path.GetPathRoot(info.FullName)}\r\n" +
+                    $"Is read only :{((readOnly == 1) ? true : false)} \r\n" +
+                    $"Last read time: {info.LastAccessTime}\r\n" +
+                    $"Last write time: {info.LastWriteTime}\r\n" +
+                    $"Size:{(ulong)file.Length/1024} KB";
+            }
+            else
+            {
+                infoStrings = $"Name: {info.Name}\r\n" +
+                   $"Parent Directory: {Path.GetDirectoryName(info.FullName)}\r\n" +
+                   $"Root Directory: {Path.GetPathRoot(info.FullName)}\r\n" +
+                   $"Is read only : {((readOnly == 1) ? true : false)} \r\n" +
+                   $"Last read time: {info.LastAccessTime}\r\n" +
+                   $"Last write time: {info.LastWriteTime}\r\n" +
+                   $"Size:{DirectoryOperations.DirSize(new DirectoryInfo(info.FullName))/1024} KB\r\n" +
+                   $"Files:{Directory.GetFiles(info.FullName).Count()}\r\n" +
+                   $"Folders:{Directory.GetDirectories(info.FullName).Count()}";
+            }
+            _modal.ShowModalWindow(infoStrings);
+            UpdateView(Path.GetDirectoryName(info.FullName));
+        }
+
+        private void UpdateView(string path)
+        {
+            Console.Clear();
+            Console.WriteLine("[F1] - Copy;[F2] - Cut;[F3] - Paste;[F4] - View File/Directory info; [F5]- Rename");
+            foreach (ListView listView in _listViews)
+            {
+                listView.Clean();
+                listView.SetlistViewItems(GetItems(Path.GetDirectoryName(listView.GetSelectedItem().State.FullName)));
+                listView.Render();
+            }
+        }
+
     }
 }

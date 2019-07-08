@@ -11,28 +11,40 @@ namespace ConsoleManager
         private int _cursorLeft = Console.WindowWidth / 2 - 20;
         private int _cursorTop = 10;
         private const ConsoleColor _backGroundColor = ConsoleColor.DarkGreen;
-        private const ConsoleColor _foreGroundColor = ConsoleColor.Black;
-
+        private const ConsoleColor _foreGroundColor = ConsoleColor.White;
 
         public string ShowModalWindow(string msg)
         {
             Console.CursorVisible = true;
-            Console.WriteLine(" ");
             Console.CursorTop = _cursorTop;
             _setModalColors();
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Console.CursorLeft = _cursorLeft;
                 Console.WriteLine(" ".PadLeft(40));
             }
             Console.CursorLeft = _cursorLeft;
             Console.CursorTop = _cursorTop;
-            Console.Write(msg);
-            Console.CursorLeft = _cursorLeft;
-            Console.CursorTop =_cursorTop + 1;
+            if (msg.Contains("\r\n"))
+            {
+                string[] msgArr = msg.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+                foreach(string str in msgArr)
+                {
+                    Console.Write(str);
+                    Console.CursorLeft = _cursorLeft;
+                    Console.CursorTop = _cursorTop = _cursorTop + 1;
+                }
+            }
+            else
+            {
+                Console.Write(msg);
+                Console.CursorLeft = _cursorLeft;
+                Console.CursorTop = _cursorTop + 1;
+            }
+            _cursorTop = 10;
+            SetAppColors();
             return Console.ReadLine();
         }
-
 
         private void _setModalColors()
         {

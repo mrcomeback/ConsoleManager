@@ -99,13 +99,20 @@ namespace ConsoleManager
             {
                 Paste?.Invoke(this, new CopyOrCutEventArgs(ItemToOperateOn.CurrentItemToOperateOn, ItemToOperateOn.CopyOrPaste));
             }
+            else if (key.Key == ConsoleKey.F4)
+            {
+                ItemToOperateOn.CurrentItemToOperateOn = _selectedItem;
+                ViewInfo?.Invoke(this, new ViewInfoEventArgs(ItemToOperateOn.CurrentItemToOperateOn));
+            }
             else if (key.Key == ConsoleKey.F5)
             {
                 Rename?.Invoke(this, EventArgs.Empty);              
             }
         }
+
         public event EventHandler Select;
         public event EventHandler Rename;
+        public event EventHandler<ViewInfoEventArgs> ViewInfo;
         public event EventHandler<CopyOrCutEventArgs> Paste;
 
         public List<ListViewItem> GetListViewItems()

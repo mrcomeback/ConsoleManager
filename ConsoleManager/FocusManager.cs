@@ -8,8 +8,6 @@ namespace ConsoleManager
 {
     class FocusManager
     {
-        
-
         public List<ListView> ChangeFocus(List<ListView> listViews, ConsoleKeyInfo key)
         {
             int focusedIndex = listViews.FindIndex(i => i.Focused == true);
