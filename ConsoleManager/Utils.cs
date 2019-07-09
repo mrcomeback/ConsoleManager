@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleManager
 {
-    internal static class DirectoryOperations
+    internal static class Utils
     {
         public static void DirectoryCopy(string sourceName, string destinationName, bool copySubDirs = true)
         {
@@ -44,23 +44,52 @@ namespace ConsoleManager
                 }
             }
         }
-        public static ulong DirSize(DirectoryInfo d)
+        public static ulong DirSize(DirectoryInfo dir)
         {
             ulong size = 0;
-            FileInfo[] fis = d.GetFiles();
+            FileInfo[] fis = dir.GetFiles();
 
             foreach (FileInfo fi in fis)
             {
                 size += (ulong)fi.Length;
             }
 
-            DirectoryInfo[] dis = d.GetDirectories();
+            DirectoryInfo[] dirs = dir.GetDirectories();
 
-            foreach (DirectoryInfo di in dis)
+            foreach (DirectoryInfo di in dirs)
             {
                 size += DirSize(di);
             }
+
             return size;
+        }
+        public static string GetDirSize(DirectoryInfo dir)
+        {
+            return NormalizeSize(DirSize(dir));
+        }
+        public static string NormalizeSize(this ulong bytes)
+        {
+            if (bytes < 1024)
+                return $"{bytes} Byte";
+
+            ulong kbytes = bytes / 1024;
+
+            if (kbytes < 1024)
+                return $"{kbytes} KB";
+
+            ulong mbytes = kbytes / 1024;
+
+            if (mbytes < 1024)
+                return $"{mbytes} MB";
+
+            ulong gbytes = mbytes / 1024;
+
+            if (gbytes < 1024)
+                return $"{gbytes} GB";
+
+            ulong tbytes = gbytes / 1024;
+
+            return $"{kbytes} TB";
         }
     }
 }

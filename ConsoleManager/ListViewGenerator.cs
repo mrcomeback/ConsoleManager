@@ -16,6 +16,7 @@ namespace ConsoleManager
 
         public List<ListView> GenerateListViews(string[] pathes)
         {
+            List<ListView> newListViews = new List<ListView>();
             for (int i = 0; i < pathes.Length; i++)
             {
                 var listView = new ListView(i > 0 ? 6 + _widthColumn1 + _widthColumn2 + _widthColumn3 : 3, 2, GetItems(pathes[i]));
@@ -30,9 +31,10 @@ namespace ConsoleManager
                 listView.CreateFolder += Create_Folder;
                 if (i == 0)
                     listView.Focused = true;
-                _listViews.Add(listView);
+                newListViews.Add(listView);
             }
-            return _listViews;
+            _listViews = newListViews;
+            return newListViews;
         }     
         private  List<ListViewItem> GetItems(string path)
         {
@@ -42,7 +44,7 @@ namespace ConsoleManager
                     f,
                     f.Name,
                     f is DirectoryInfo dir ? "<dir>" : f.Extension,
-                    f is FileInfo file ? file.Length.ToString() : String.Empty)).ToList();
+                    f is FileInfo file ? Utils.NormalizeSize((ulong)file.Length) : String.Empty)).ToList();
         }
         private void View_Selected(object sender, EventArgs eventArgs)
         {
@@ -121,7 +123,7 @@ namespace ConsoleManager
                     var folderToCopy = sourceInfo.FullName;
                     var folderToPaste = listView.GetCurPath() + "\\" + sourceInfo.Name;
 
-                    DirectoryOperations.DirectoryCopy(folderToCopy, folderToPaste);
+                    Utils.DirectoryCopy(folderToCopy, folderToPaste);
                 }
 
                 else if (eventArgs.CopyOrCut == false)
@@ -156,7 +158,7 @@ namespace ConsoleManager
                     $"Is read only :{((readOnly == 1) ? true : false)} \r\n" +
                     $"Last read time: {info.LastAccessTime}\r\n" +
                     $"Last write time: {info.LastWriteTime}\r\n" +
-                    $"Size:{(ulong)file.Length/1024} KB";
+                    $"Size:{Utils.NormalizeSize((ulong)file.Length)}";
             }
             else
             {
@@ -166,7 +168,7 @@ namespace ConsoleManager
                    $"Is read only : {((readOnly == 1) ? true : false)} \r\n" +
                    $"Last read time: {info.LastAccessTime}\r\n" +
                    $"Last write time: {info.LastWriteTime}\r\n" +
-                   $"Size:{DirectoryOperations.DirSize(new DirectoryInfo(info.FullName))/1024} KB\r\n" +
+                   $"Size:{Utils.GetDirSize(new DirectoryInfo(info.FullName))}\r\n" +
                    $"Files:{Directory.GetFiles(info.FullName).Count()}\r\n" +
                    $"Folders:{Directory.GetDirectories(info.FullName).Count()}";
             }

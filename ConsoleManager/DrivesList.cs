@@ -28,6 +28,10 @@ namespace ConsoleManager
         {
             return _listViewDriveItems;
         }
-
+        public static string[] GetDrivesPathes()
+        {
+            DriveInfo[] drivers = DriveInfo.GetDrives();
+            return drivers.Where(f => f.IsReady == true).Select(i => i.Name).ToArray();
+        }
     }
 }
