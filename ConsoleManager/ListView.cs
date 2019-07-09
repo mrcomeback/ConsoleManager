@@ -115,8 +115,9 @@ namespace ConsoleManager
             }
             else if (key.Key == ConsoleKey.F7)
             {
+
                 FileSystemInfo info = (FileSystemInfo)_selectedItem.State;
-                //GoTo?.Invoke(this, new RootEventArgs(Path.GetPathRoot(info.FullName)));
+                GoTo?.Invoke(this, new RootEventArgs(Path.GetPathRoot(info.FullName)));
             }
             else if (key.Key == ConsoleKey.F8)
             {

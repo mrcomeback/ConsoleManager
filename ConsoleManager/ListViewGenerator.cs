@@ -22,12 +22,14 @@ namespace ConsoleManager
             {
                 var listView = new ListView(i > 0 ? 6 + _widthColumn1 + _widthColumn2 + _widthColumn3 : 3, 2, GetItems(pathes[i]));
                 listView.SetColumnsWidth(new List<int> { _widthColumn1, _widthColumn2, _widthColumn3 });
+                listView.Path = pathes[i];
                 listView.Select += View_Selected;
                 listView.Rename += View_Renamed;
                 listView.Paste += View_Paste;
                 listView.ViewInfo += View_Info;
                 listView.ViewDrives += View_Drives;
                 listView.GoTo += Go_To;
+                listView.CreateFolder += Create_Folder;
                 if (i == 0)
                     listView.Focused = true;
                 _listViews.Add(listView);
@@ -195,7 +197,11 @@ namespace ConsoleManager
         }
         private void Create_Folder(object sender, EventArgs eventArgs)
         {
-
+            ListView listView = (ListView)sender;
+            string userInput = _modal.ShowModalWindow("Enter Folder Name");
+            Directory.CreateDirectory(listView.Path + "\\" + userInput);
+            _modal.SetAppColors();
+            UpdateView();
         }
         private void UpdateView()
         {
