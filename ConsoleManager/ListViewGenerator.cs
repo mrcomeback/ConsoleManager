@@ -50,9 +50,12 @@ namespace ConsoleManager
             var listView = (ListView)sender;
             var info = listView.GetSelectedItem().State;
             if (info is FileInfo file)
+            {
                 Process.Start(file.FullName);
+            }
             else if (info is DirectoryInfo dir)
             {
+                listView.Path = dir.FullName;
                 listView.Clean();
                 listView.SetlistViewItems(GetItems(dir.FullName));
             }
@@ -90,15 +93,15 @@ namespace ConsoleManager
         private void View_Paste(object sender, CopyOrCutEventArgs eventArgs)
         {
             ListView listView = (ListView)sender;
-            FileSystemInfo senderInfo = (FileSystemInfo)listView.GetSelectedItem().State;
+            //FileSystemInfo senderInfo = (FileSystemInfo)listView.GetSelectedItem().State;
             FileSystemInfo sourceInfo = (FileSystemInfo)eventArgs.ListViewItem.State;
-
+            
             if (sourceInfo is FileInfo file)
             {
                 if (eventArgs.CopyOrCut == true)
                 {
                     var fileToCopy = sourceInfo.FullName;
-                    var fileToPaste = Path.GetDirectoryName(senderInfo.FullName) + "\\" + Path.GetFileName(sourceInfo.FullName);
+                    var fileToPaste = listView.Path + "\\" + Path.GetFileName(sourceInfo.FullName);
 
                     File.Copy(fileToCopy, fileToPaste);
                 }
@@ -106,7 +109,7 @@ namespace ConsoleManager
                 else if (eventArgs.CopyOrCut == false)
                 {
                     var fileToCopy = sourceInfo.FullName;
-                    var fileToPaste = Path.GetDirectoryName(senderInfo.FullName) + "\\" + Path.GetFileName(sourceInfo.FullName);
+                    var fileToPaste = listView.Path + "\\" + Path.GetFileName(sourceInfo.FullName);
                     File.Move(fileToCopy, fileToPaste);
                 }
             }
@@ -116,7 +119,7 @@ namespace ConsoleManager
                 if (eventArgs.CopyOrCut == true)
                 {
                     var folderToCopy = sourceInfo.FullName;
-                    var folderToPaste = Path.GetDirectoryName(senderInfo.FullName) + "\\" + sourceInfo.Name;
+                    var folderToPaste = listView.Path + "\\" + sourceInfo.Name;
 
                     DirectoryOperations.DirectoryCopy(folderToCopy, folderToPaste);
                 }
@@ -124,7 +127,7 @@ namespace ConsoleManager
                 else if (eventArgs.CopyOrCut == false)
                 {
                     var folderToCopy = sourceInfo.FullName;
-                    var folderToPaste = Path.GetDirectoryName(senderInfo.FullName) + "\\" + sourceInfo.Name;
+                    var folderToPaste = listView.Path + "\\" + sourceInfo.Name;
 
                     Directory.Move(folderToCopy, folderToPaste);
                 }
@@ -132,10 +135,12 @@ namespace ConsoleManager
 
             foreach (ListView lv in _listViews)
             {
-                lv.Clean();
-                FileSystemInfo state = (FileSystemInfo)lv.GetSelectedItem().State;
-                lv.SetlistViewItems(GetItems(Path.GetDirectoryName(state.FullName)));
-                lv.Render();
+                if (lv.Path != null)
+                {
+                    lv.Clean();
+                    lv.SetlistViewItems(GetItems(lv.Path));
+                    lv.Render();
+                }
             }
         }
         private void View_Info(object sender, ViewInfoEventArgs eventArgs)
@@ -187,6 +192,10 @@ namespace ConsoleManager
             var view = (ListView)sender;
             view.Clean();
             view.SetlistViewItems(GetItems(eventArgs.path));
+        }
+        private void Create_Folder(object sender, EventArgs eventArgs)
+        {
+
         }
         private void UpdateView()
         {
