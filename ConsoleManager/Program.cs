@@ -14,7 +14,7 @@ namespace ConsoleManager
             ListViewGenerator listViewGenerator = new ListViewGenerator();
             FocusManager focusManager = new FocusManager();
             ModalWindow modalWindow = new ModalWindow();
-            List<ListView> listviews = listViewGenerator.GenerateListViews(new string[] { "D:\\", "D:\\"});
+            List<ListView> listviews = listViewGenerator.GenerateListViews(new string[] { "E:\\", "E:\\"});
             Console.WriteLine("[F1] - Copy;[F2] - Cut;[F3] - Paste;[F4] - View File/Directory info; [F5]- Rename; [F6] - View Drives; [F7] - Go to Root ");
 
             foreach (ListView listView in listviews)

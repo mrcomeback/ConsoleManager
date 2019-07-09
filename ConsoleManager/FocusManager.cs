@@ -25,16 +25,5 @@ namespace ConsoleManager
             }
             return listViews;
         }
-        //public List<ListView> ChangeFocusToDrives(List<ListView> listViews)
-        //{
-        //    listViews.Where(i => i.GetListViewItems().Any(f =>
-        //    {
-        //        var info = (FileSystemInfo)f.State;
-        //        if (info is DriveInfo)
-        //        {
-
-        //        }
-        //    });
-        //}
     }
 }

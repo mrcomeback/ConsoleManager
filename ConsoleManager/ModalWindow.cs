@@ -42,8 +42,9 @@ namespace ConsoleManager
                 Console.CursorTop = _cursorTop + 1;
             }
             _cursorTop = 10;
+            string res = Console.ReadLine();
             SetAppColors();
-            return Console.ReadLine();
+            return res;
         }
 
         private void _setModalColors()
@@ -56,6 +57,5 @@ namespace ConsoleManager
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
         }
-
     }
 }

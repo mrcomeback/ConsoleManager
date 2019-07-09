@@ -13,8 +13,8 @@ namespace ConsoleManager
         private List<ListViewItem> _items;
         private List<int> _columnsWidth;
         private ListViewItem _selectedItem => _items.Count == 0 ? null : _items[_selectedIndex];
-        public string Path { get; set; }
         private int _x, _y;
+        private string _curPath { get; set; }
         public bool IsDrives = false;
         public bool Focused { get; set; }
 
@@ -115,9 +115,7 @@ namespace ConsoleManager
             }
             else if (key.Key == ConsoleKey.F7)
             {
-
-                FileSystemInfo info = (FileSystemInfo)_selectedItem.State;
-                GoTo?.Invoke(this, new RootEventArgs(Path.GetPathRoot(info.FullName)));
+                GoTo?.Invoke(this, new RootEventArgs(Path.GetPathRoot(_curPath)));
             }
             else if (key.Key == ConsoleKey.F8)
             {
@@ -152,6 +150,14 @@ namespace ConsoleManager
         public ListViewItem GetSelectedItem()
         {
             return _selectedItem;
+        }
+        public string GetCurPath()
+        {
+            return _curPath;
+        }
+        public void SetCurPath(string newPath)
+        {
+            _curPath = newPath;
         }
     }
 }
