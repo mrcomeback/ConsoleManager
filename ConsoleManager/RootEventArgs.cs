@@ -2,7 +2,7 @@
 
 namespace ConsoleManager
 {
-    public class RootEventArgs : EventArgs
+    internal class RootEventArgs : EventArgs
     {
         public string path;
 

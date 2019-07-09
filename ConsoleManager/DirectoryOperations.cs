@@ -28,6 +28,7 @@ namespace ConsoleManager
             }
 
             FileInfo[] files = directoryInfo.GetFiles();
+
             foreach (FileInfo file in files)
             {
                 string tempPath = Path.Combine(destinationName, file.Name);

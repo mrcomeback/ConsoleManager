@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleManager
 {
-    class ModalWindow
+    internal class ModalWindow
     {
         private int _cursorLeft = Console.WindowWidth / 2 - 20;
         private int _cursorTop = 10;

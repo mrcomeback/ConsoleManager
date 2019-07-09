@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ConsoleManager
 {
-    class FocusManager
+    internal class FocusManager
     {
         public List<ListView> ChangeFocus(List<ListView> listViews, ConsoleKeyInfo key)
         {

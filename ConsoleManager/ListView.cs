@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ConsoleManager
 {
-    class ListView
+    internal class ListView
     {
         private int _prevSelecteIndex;
         private int _selectedIndex;
@@ -49,6 +49,7 @@ namespace ConsoleManager
                 var item = _items[i];
                 var savedForeground = Console.ForegroundColor;
                 var savedBackGround = Console.BackgroundColor;
+
                 if (i == _selectedIndex)
                 {
                     if (Focused == true)
@@ -62,11 +63,11 @@ namespace ConsoleManager
                         Console.BackgroundColor = ConsoleColor.White;
                     }
                 }
+
                 Console.CursorLeft = _x;
                 Console.CursorTop = i +_y;
                 Console.Write(item);
                 item.Render(_columnsWidth, i, _x, _y);
-
                 Console.ForegroundColor = savedForeground;
                 Console.BackgroundColor = savedBackGround;
             }
@@ -82,7 +83,8 @@ namespace ConsoleManager
             else if (key.Key == ConsoleKey.DownArrow && _selectedIndex < _items.Count - 1)
             {
                 _selectedIndex++;
-            }else if (key.Key == ConsoleKey.Enter)
+            }
+            else if (key.Key == ConsoleKey.Enter)
             {
                 Select?.Invoke(this, EventArgs.Empty);
             }

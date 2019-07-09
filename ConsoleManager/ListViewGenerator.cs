@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleManager
 {
-    class ListViewGenerator
+    internal class ListViewGenerator
     {
         private const int _widthColumn1 = 35;
         private const int _widthColumn2 = 10;
@@ -36,7 +34,7 @@ namespace ConsoleManager
             }
             return _listViews;
         }     
-        public  List<ListViewItem> GetItems(string path)
+        private  List<ListViewItem> GetItems(string path)
         {
             return new DirectoryInfo(path).GetFileSystemInfos()
                 .Select(f =>
@@ -50,6 +48,7 @@ namespace ConsoleManager
         {
             var listView = (ListView)sender;
             var info = listView.GetSelectedItem().State;
+
             if (info is FileInfo file)
             {
                 Process.Start(file.FullName);
@@ -88,13 +87,13 @@ namespace ConsoleManager
             {
                 Directory.Move(state.FullName, newPath);
             }
+
             _modal.SetAppColors();
             UpdateView();
         }
         private void View_Paste(object sender, CopyOrCutEventArgs eventArgs)
         {
             ListView listView = (ListView)sender;
-            //FileSystemInfo senderInfo = (FileSystemInfo)listView.GetSelectedItem().State;
             FileSystemInfo sourceInfo = (FileSystemInfo)eventArgs.ListViewItem.State;
             
             if (sourceInfo is FileInfo file)
@@ -177,12 +176,13 @@ namespace ConsoleManager
         private void View_Drives(object sender, EventArgs eventArgs)
         {
             _listViews.Find(i => i.Focused == true).Focused = false;
-            var drivers = new DriversList();
-            var lv = new ListView(35, 10, drivers.GetDriversList());
+            DrivesList drivers = new DrivesList();
+            ListView lv = new ListView(35, 10, drivers.GetDriversList());
             lv.SetColumnsWidth(new List<int> { 35, 10, 10 });
             lv.Select += View_Selected;
             lv.Focused = true;
             _listViews.Add(lv);
+
             foreach (ListView list in _listViews)
             {
                 list.Render();
@@ -205,7 +205,8 @@ namespace ConsoleManager
         private void UpdateView()
         {
             Console.Clear();
-            Console.WriteLine("[F1] - Copy;[F2] - Cut;[F3] - Paste;[F4] - View File/Directory info; [F5]- Rename; [F6] - View Drives; [F7] - Go to Root");
+            Console.WriteLine("[F1] - Copy;[F2] - Cut;[F3] - Paste;[F4] - View File/Directory info; [F5]- Rename; [F6] - View Drives; [F7] - Go to Root; [F8]- Create Folder");
+
             foreach (ListView listView in _listViews)
             {
                 listView.Clean();

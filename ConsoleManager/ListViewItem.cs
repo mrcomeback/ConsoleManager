@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleManager
 {
-    class ListViewItem
+    internal class ListViewItem
     {
         private readonly string[] _columns;
         public object State { get; }
@@ -18,7 +18,7 @@ namespace ConsoleManager
             _columns = columns;
         }
 
-        internal void Render(List<int> columnsWidth,int elementIndex, int listViewX, int listViewY)
+        public void Render(List<int> columnsWidth,int elementIndex, int listViewX, int listViewY)
         {
             for (int i = 0; i < _columns.Length; i++)
             {
@@ -28,7 +28,7 @@ namespace ConsoleManager
             }
         }
 
-        internal void Clean(List<int> columnsWidth, int i, int x, int y)
+        public void Clean(List<int> columnsWidth, int i, int x, int y)
         {
             Console.CursorTop = i + y;
             Console.CursorLeft = x;

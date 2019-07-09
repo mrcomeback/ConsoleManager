@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace ConsoleManager
 {
-    class DriversList
+    internal class DrivesList
     {
-        private List<ListViewItem> _listViewsItems;
+        private List<ListViewItem> _listViewDriveItems;
 
-        public  DriversList()
+        public  DrivesList()
         {
             DriveInfo[] drivers = DriveInfo.GetDrives();
 
-            _listViewsItems = 
+            _listViewDriveItems = 
                 drivers.Where(i => i.IsReady == true).Select(i =>
                 new ListViewItem(
                     i,
@@ -26,7 +26,7 @@ namespace ConsoleManager
 
         public List<ListViewItem> GetDriversList()
         {
-            return _listViewsItems;
+            return _listViewDriveItems;
         }
 
     }
