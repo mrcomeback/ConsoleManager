@@ -14,7 +14,7 @@ namespace ConsoleManager
         private List<int> _columnsWidth;
         private ListViewItem _selectedItem => _items[_selectedIndex];
         private int _x, _y;
-
+        public bool IsDrives = false;
         public bool Focused { get; set; }
 
         public void Clean()
@@ -112,34 +112,41 @@ namespace ConsoleManager
             {
                 ViewDrives?.Invoke(this, EventArgs.Empty);
             }
+            else if (key.Key == ConsoleKey.F7)
+            {
+                FileSystemInfo info = (FileSystemInfo)_selectedItem.State;
+                GoTo?.Invoke(this, new RootEventArgs(Path.GetPathRoot(info.FullName)));
+            }
+            else if (key.Key == ConsoleKey.F8)
+            {
+
+            }
         }
 
         public event EventHandler Select;
         public event EventHandler Rename;
         public event EventHandler ViewDrives;
+        public event EventHandler CreateFolder;
         public event EventHandler<ViewInfoEventArgs> ViewInfo;
         public event EventHandler<CopyOrCutEventArgs> Paste;
+        public event EventHandler<RootEventArgs> GoTo;
 
         public List<ListViewItem> GetListViewItems()
         {
             return _items;
         }
-
         public void SetlistViewItems(List<ListViewItem> newItems)
         {
             _items = newItems;
         }
-
         public void SetColumnsWidth(List<int> columnsWidth)
         {
             _columnsWidth = columnsWidth;
         }
-
         public List<int> GetColumnsWidth()
         {
             return _columnsWidth;
         }
-
         public ListViewItem GetSelectedItem()
         {
             return _selectedItem;

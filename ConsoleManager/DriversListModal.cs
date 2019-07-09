@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace ConsoleManager
 {
-    class DriversListModal
+    class DriversList
     {
-        private List<ListViewItem> _listViews;
+        private List<ListViewItem> _listViewsItems;
 
-        public  DriversListModal()
+        public  DriversList()
         {
             DriveInfo[] drivers = DriveInfo.GetDrives();
 
-            _listViews = 
-                drivers.Select(i =>
+            _listViewsItems = 
+                drivers.Where(i => i.IsReady == true).Select(i =>
                 new ListViewItem(
                     i,
                     i.Name,
@@ -24,9 +24,9 @@ namespace ConsoleManager
                     )).ToList(); ;
         }
 
-        public List<ListViewItem> getDriversList()
+        public List<ListViewItem> GetDriversList()
         {
-            return _listViews;
+            return _listViewsItems;
         }
 
     }

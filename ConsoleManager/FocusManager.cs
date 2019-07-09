@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,5 +25,16 @@ namespace ConsoleManager
             }
             return listViews;
         }
+        //public List<ListView> ChangeFocusToDrives(List<ListView> listViews)
+        //{
+        //    listViews.Where(i => i.GetListViewItems().Any(f =>
+        //    {
+        //        var info = (FileSystemInfo)f.State;
+        //        if (info is DriveInfo)
+        //        {
+
+        //        }
+        //    });
+        //}
     }
 }

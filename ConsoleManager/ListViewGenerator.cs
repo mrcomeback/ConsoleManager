@@ -27,6 +27,7 @@ namespace ConsoleManager
                 listView.Paste += View_Paste;
                 listView.ViewInfo += View_Info;
                 listView.ViewDrives += View_Drives;
+                listView.GoTo += Go_To;
                 if (i == 0)
                     listView.Focused = true;
                 _listViews.Add(listView);
@@ -44,20 +45,29 @@ namespace ConsoleManager
                     f is DirectoryInfo dir ? "<dir>" : f.Extension,
                     f is FileInfo file ? file.Length.ToString() : String.Empty)).ToList();
         }
-
         private void View_Selected(object sender, EventArgs eventArgs)
         {
-            var view = (ListView)sender;
-            var info = view.GetSelectedItem().State;
+            var listView = (ListView)sender;
+            var info = listView.GetSelectedItem().State;
             if (info is FileInfo file)
                 Process.Start(file.FullName);
             else if (info is DirectoryInfo dir)
             {
-                view.Clean();
-                view.SetlistViewItems(GetItems(dir.FullName));
+                listView.Clean();
+                listView.SetlistViewItems(GetItems(dir.FullName));
+            }
+            else if (info is DriveInfo drive)
+            {
+                listView.Focused = false;
+                listView.IsDrives = true;
+                var firstListView = _listViews[0];
+                firstListView.Focused = true;
+                firstListView.Clean();
+                firstListView.SetlistViewItems(GetItems(drive.Name));
+                _listViews.Remove(listView);
+                UpdateView();
             }
         }
-
         private void View_Renamed(object sender, EventArgs eventArgs)
         {
             ListView listView = (ListView)sender;
@@ -75,9 +85,8 @@ namespace ConsoleManager
                 Directory.Move(state.FullName, newPath);
             }
             _modal.SetAppColors();
-            UpdateView(Path.GetDirectoryName(state.FullName));
+            UpdateView();
         }
-
         private void View_Paste(object sender, CopyOrCutEventArgs eventArgs)
         {
             ListView listView = (ListView)sender;
@@ -129,7 +138,6 @@ namespace ConsoleManager
                 lv.Render();
             }
         }
-
         private void View_Info(object sender, ViewInfoEventArgs eventArgs)
         {
             FileSystemInfo info = (FileSystemInfo)eventArgs.ListViewItem.State;
@@ -158,38 +166,42 @@ namespace ConsoleManager
                    $"Folders:{Directory.GetDirectories(info.FullName).Count()}";
             }
             _modal.ShowModalWindow(infoStrings);
-            UpdateView(Path.GetDirectoryName(info.FullName));
+            UpdateView();
         }
-
         private void View_Drives(object sender, EventArgs eventArgs)
         {
-            var drivers = new DriversListModal();
-            var lv = new ListView(35, 10, drivers.getDriversList());
+            _listViews.Find(i => i.Focused == true).Focused = false;
+            var drivers = new DriversList();
+            var lv = new ListView(35, 10, drivers.GetDriversList());
             lv.SetColumnsWidth(new List<int> { 35, 10, 10 });
+            lv.Select += View_Selected;
+            lv.Focused = true;
             _listViews.Add(lv);
-            foreach(ListView list in _listViews)
+            foreach (ListView list in _listViews)
             {
                 list.Render();
             }
-            //var lv = GenerateListViews(35, 10, drivers.getDriversList());
-            //Console.BackgroundColor = ConsoleColor.Blue;
-
-
-            Console.WriteLine();
         }
-
-        private void UpdateView(string path)
+        private void Go_To(object sender, RootEventArgs eventArgs)
+        {
+            var view = (ListView)sender;
+            view.Clean();
+            view.SetlistViewItems(GetItems(eventArgs.path));
+        }
+        private void UpdateView()
         {
             Console.Clear();
-            Console.WriteLine("[F1] - Copy;[F2] - Cut;[F3] - Paste;[F4] - View File/Directory info; [F5]- Rename");
+            Console.WriteLine("[F1] - Copy;[F2] - Cut;[F3] - Paste;[F4] - View File/Directory info; [F5]- Rename; [F6] - View Drives; [F7] - Go to Root");
             foreach (ListView listView in _listViews)
             {
                 listView.Clean();
-                FileSystemInfo state = (FileSystemInfo)listView.GetSelectedItem().State;
-                listView.SetlistViewItems(GetItems(Path.GetDirectoryName(state.FullName)));
-                listView.Render();
+                if (listView.GetSelectedItem().State is FileSystemInfo fileInfo)
+                {
+                    FileSystemInfo state = fileInfo;
+                    listView.SetlistViewItems(GetItems(Path.GetDirectoryName(state.FullName)));
+                    listView.Render();
+                }
             }
         }
-
     }
 }
