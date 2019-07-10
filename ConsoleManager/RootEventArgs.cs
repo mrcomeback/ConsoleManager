@@ -4,11 +4,11 @@ namespace ConsoleManager
 {
     internal class RootEventArgs : EventArgs
     {
-        public string path;
+        public string Path { get; set; }
 
         public RootEventArgs(string path)
         {
-            this.path = path;
+            this.Path = path;
         }
     }
 }

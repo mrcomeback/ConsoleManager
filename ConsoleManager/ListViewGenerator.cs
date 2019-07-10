@@ -153,29 +153,26 @@ namespace ConsoleManager
         private void View_Info(object sender, ViewInfoEventArgs eventArgs)
         {
             FileSystemInfo info = (FileSystemInfo)eventArgs.ListViewItem.State;
-            string infoStrings = String.Empty;
+            //string infoStrings = String.Empty;
             int readOnly = ((int)(info.Attributes) & (int)FileAttributes.ReadOnly);
+            string infoStrings = $"Name: {info.Name}\r\n" +
+                $"Parent Directory: {Path.GetDirectoryName(info.FullName)}\r\n" +
+                $"Root Directory: {Path.GetPathRoot(info.FullName)}\r\n" +
+                $"Is read only :{((readOnly == 1) ? true : false)} \r\n" +
+                $"Last read time: {info.LastAccessTime}\r\n" +
+                $"Last write time: {info.LastWriteTime}\r\n";
+
             if (info is FileInfo file)
             {
-                infoStrings = $"Name: {info.Name}\r\n" +
-                    $"Parent Directory: {Path.GetDirectoryName(info.FullName)}\r\n" +
-                    $"Root Directory: {Path.GetPathRoot(info.FullName)}\r\n" +
-                    $"Is read only :{((readOnly == 1) ? true : false)} \r\n" +
-                    $"Last read time: {info.LastAccessTime}\r\n" +
-                    $"Last write time: {info.LastWriteTime}\r\n" +
+                infoStrings += 
                     $"Size:{Utils.NormalizeSize((ulong)file.Length)}";
             }
             else
             {
-                infoStrings = $"Name: {info.Name}\r\n" +
-                   $"Parent Directory: {Path.GetDirectoryName(info.FullName)}\r\n" +
-                   $"Root Directory: {Path.GetPathRoot(info.FullName)}\r\n" +
-                   $"Is read only : {((readOnly == 1) ? true : false)} \r\n" +
-                   $"Last read time: {info.LastAccessTime}\r\n" +
-                   $"Last write time: {info.LastWriteTime}\r\n" +
+                infoStrings += 
                    $"Size:{Utils.GetDirSize(new DirectoryInfo(info.FullName))}\r\n" +
-                   $"Files:{Directory.GetFiles(info.FullName).Count()}\r\n" +
-                   $"Folders:{Directory.GetDirectories(info.FullName).Count()}";
+                   $"Files:{Directory.GetFiles(info.FullName, "*.*", SearchOption.AllDirectories).Count()}\r\n" +
+                   $"Folders:{Directory.GetDirectories(info.FullName, "*", SearchOption.AllDirectories).Count()}";
             }
             _modal.ShowModalWindow(infoStrings);
             UpdateView();
@@ -201,7 +198,7 @@ namespace ConsoleManager
         {
             var view = (ListView)sender;
             view.Clean();
-            view.SetlistViewItems(GetItems(eventArgs.path));
+            view.SetlistViewItems(GetItems(eventArgs.Path));
         }
 
         private void Create_Folder(object sender, EventArgs eventArgs)
