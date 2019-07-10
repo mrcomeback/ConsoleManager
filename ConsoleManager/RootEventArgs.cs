@@ -8,7 +8,7 @@ namespace ConsoleManager
 
         public RootEventArgs(string path)
         {
-            this.Path = path;
+            Path = path;
         }
     }
 }
