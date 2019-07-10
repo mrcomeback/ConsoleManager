@@ -14,7 +14,7 @@ namespace ConsoleManager
         private List<int> _columnsWidth;
         private ListViewItem _selectedItem => _items.Count == 0 ? null : _items[_selectedIndex];
         private int _x, _y;
-        private string _curPath;
+        public string CurPath { get; set; }
         public bool IsDrives = false;
         public bool Focused { get; set; }
 
@@ -117,7 +117,7 @@ namespace ConsoleManager
             }
             else if (key.Key == ConsoleKey.F7)
             {
-                GoTo?.Invoke(this, new RootEventArgs(Path.GetPathRoot(_curPath)));
+                GoTo?.Invoke(this, new RootEventArgs(Path.GetPathRoot(CurPath)));
             }
             else if (key.Key == ConsoleKey.F8)
             {
@@ -144,14 +144,6 @@ namespace ConsoleManager
         public ListViewItem GetSelectedItem()
         {
             return _selectedItem;
-        }
-        public string GetCurPath()
-        {
-            return _curPath;
-        }
-        public void SetCurPath(string newPath)
-        {
-            _curPath = newPath;
         }
     }
 }

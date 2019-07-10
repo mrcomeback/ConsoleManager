@@ -17,7 +17,7 @@ namespace ConsoleManager
         {
             Console.CursorVisible = true;
             Console.CursorTop = _cursorTop;
-            _setModalColors();
+            SetModalColors();
             for (int i = 0; i < 10; i++)
             {
                 Console.CursorLeft = _cursorLeft;
@@ -47,7 +47,7 @@ namespace ConsoleManager
             return res;
         }
 
-        private void _setModalColors()
+        private void SetModalColors()
         {
             Console.BackgroundColor = _backGroundColor;
             Console.ForegroundColor = _foreGroundColor;
