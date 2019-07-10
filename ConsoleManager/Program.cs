@@ -14,7 +14,7 @@ namespace ConsoleManager
             ListViewGenerator listViewGenerator = new ListViewGenerator();
             FocusManager focusManager = new FocusManager();
             List<ListView> listViews = listViewGenerator.GenerateListViews(DrivesList.GetDrivesPathes());
-            Console.WriteLine("[F1] - Copy;[F2] - Cut;[F3] - Paste;[F4] - View File/Directory info; [F5]- Rename; [F6] - View Drives; [F7] - Go to Root; [F8]- Create Folder");
+            Console.WriteLine(Utils.CommandsInformation);
 
             foreach (ListView listView in listViews)
             {
@@ -48,6 +48,7 @@ namespace ConsoleManager
                     ModalWindow modal = new ModalWindow();
                     modal.ShowModalWindow("THE EXCEPTION IS HERE");
                     Console.Clear();
+                    Console.WriteLine(Utils.CommandsInformation);
                     listViews = listViewGenerator.GenerateListViews(DrivesList.GetDrivesPathes());
                     foreach (ListView listView in listViews)
                     {

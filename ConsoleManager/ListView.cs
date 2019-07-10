@@ -14,7 +14,7 @@ namespace ConsoleManager
         private List<int> _columnsWidth;
         private ListViewItem _selectedItem => _items.Count == 0 ? null : _items[_selectedIndex];
         private int _x, _y;
-        private string _curPath { get; set; }
+        private string _curPath;
         public bool IsDrives = false;
         public bool Focused { get; set; }
 
@@ -133,10 +133,6 @@ namespace ConsoleManager
         public event EventHandler<CopyOrCutEventArgs> Paste;
         public event EventHandler<RootEventArgs> GoTo;
 
-        public List<ListViewItem> GetListViewItems()
-        {
-            return _items;
-        }
         public void SetlistViewItems(List<ListViewItem> newItems)
         {
             _items = newItems;
@@ -144,10 +140,6 @@ namespace ConsoleManager
         public void SetColumnsWidth(List<int> columnsWidth)
         {
             _columnsWidth = columnsWidth;
-        }
-        public List<int> GetColumnsWidth()
-        {
-            return _columnsWidth;
         }
         public ListViewItem GetSelectedItem()
         {

@@ -9,6 +9,7 @@ namespace ConsoleManager
 {
     internal static class Utils
     {
+        public static string CommandsInformation = "[F1] - Copy;[F2] - Cut;[F3] - Paste;[F4] - View File/Directory info; [F5]- Rename; [F6] - View Drives; [F7] - Go to Root; [F8]- Create Folder";
         public static void DirectoryCopy(string sourceName, string destinationName, bool copySubDirs = true)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(sourceName);
@@ -67,7 +68,7 @@ namespace ConsoleManager
         {
             return NormalizeSize(DirSize(dir));
         }
-        public static string NormalizeSize(this ulong bytes)
+        public static string NormalizeSize(ulong bytes)
         {
             if (bytes < 1024)
                 return $"{bytes} Byte";

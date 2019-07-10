@@ -35,7 +35,8 @@ namespace ConsoleManager
             }
             _listViews = newListViews;
             return newListViews;
-        }     
+        }
+        
         private  List<ListViewItem> GetItems(string path)
         {
             return new DirectoryInfo(path).GetFileSystemInfos()
@@ -46,6 +47,7 @@ namespace ConsoleManager
                     f is DirectoryInfo dir ? "<dir>" : f.Extension,
                     f is FileInfo file ? Utils.NormalizeSize((ulong)file.Length) : String.Empty)).ToList();
         }
+
         private void View_Selected(object sender, EventArgs eventArgs)
         {
             var listView = (ListView)sender;
@@ -73,6 +75,7 @@ namespace ConsoleManager
                 UpdateView();
             }
         }
+
         private void View_Renamed(object sender, EventArgs eventArgs)
         {
             ListView listView = (ListView)sender;
@@ -93,6 +96,7 @@ namespace ConsoleManager
             _modal.SetAppColors();
             UpdateView();
         }
+
         private void View_Paste(object sender, CopyOrCutEventArgs eventArgs)
         {
             ListView listView = (ListView)sender;
@@ -145,6 +149,7 @@ namespace ConsoleManager
                 }
             }
         }
+
         private void View_Info(object sender, ViewInfoEventArgs eventArgs)
         {
             FileSystemInfo info = (FileSystemInfo)eventArgs.ListViewItem.State;
@@ -175,6 +180,7 @@ namespace ConsoleManager
             _modal.ShowModalWindow(infoStrings);
             UpdateView();
         }
+
         private void View_Drives(object sender, EventArgs eventArgs)
         {
             _listViews.Find(i => i.Focused == true).Focused = false;
@@ -190,12 +196,14 @@ namespace ConsoleManager
                 list.Render();
             }
         }
+
         private void Go_To(object sender, RootEventArgs eventArgs)
         {
             var view = (ListView)sender;
             view.Clean();
             view.SetlistViewItems(GetItems(eventArgs.path));
         }
+
         private void Create_Folder(object sender, EventArgs eventArgs)
         {
             ListView listView = (ListView)sender;
@@ -204,11 +212,11 @@ namespace ConsoleManager
             _modal.SetAppColors();
             UpdateView();
         }
+
         private void UpdateView()
         {
             Console.Clear();
-            Console.WriteLine("[F1] - Copy;[F2] - Cut;[F3] - Paste;[F4] - View File/Directory info; [F5]- Rename; [F6] - View Drives; [F7] - Go to Root; [F8]- Create Folder");
-
+            Console.WriteLine(Utils.CommandsInformation);
             foreach (ListView listView in _listViews)
             {
                 listView.Clean();
