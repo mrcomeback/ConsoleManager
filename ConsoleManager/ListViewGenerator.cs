@@ -152,7 +152,6 @@ namespace ConsoleManager
         private void View_Info(object sender, ViewInfoEventArgs eventArgs)
         {
             FileSystemInfo info = (FileSystemInfo)eventArgs.ListViewItem.State;
-            //string infoStrings = String.Empty;
             int readOnly = ((int)(info.Attributes) & (int)FileAttributes.ReadOnly);
             string infoStrings = $"Name: {info.Name}\r\n" +
                 $"Parent Directory: {Path.GetDirectoryName(info.FullName)}\r\n" +
